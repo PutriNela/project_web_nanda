@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UjiCerdas — Sistem Ujian Berbasis Komputer</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+        colors: {
+          ink: '#211f36',
+          brand: {
+            50:  '#f4f2ff',
+            100: '#ebe7ff',
+            200: '#d5cbff',
+            300: '#b6a3ff',
+            400: '#9575ff',
+            500: '#7c4dff',
+            600: '#6631e8',
+            700: '#5324bd',
+            800: '#421d96',
+            900: '#341876',
+          },
+        },
+      }
+    }
+  };
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brand-dark: #421d96;
+    --brand: #5b2ad1;
+    --brand-mid: #6631e8;
+    --brand-light: #f4f2ff;
+    --brand-light-2: #ebe7ff;
+    --accent: #f59e0b;
+    --ring: #7c4dff;
+    --border: #e9e4fb;
+    --sidebar-bg: #1c1333;
+    --sidebar-bg-hover: #2a1f4d;
+    --shadow-soft: 0 1px 2px rgba(66, 29, 150, 0.05), 0 6px 18px rgba(66, 29, 150, 0.07);
+    --shadow-soft-hover: 0 3px 8px rgba(66, 29, 150, 0.08), 0 14px 28px rgba(66, 29, 150, 0.12);
+  }
+
+  body { font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: #d5cbff; border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: #b6a3ff; }
+
+  .table-cell { padding: 0.9rem 1.15rem; border-bottom: 1px solid var(--border); }
+  .table-cell-num { text-align: center; font-variant-numeric: tabular-nums; }
+
+  .badge { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.22rem 0.7rem; font-size: 0.72rem; font-weight: 700; border: 1px solid; border-radius: 0.5rem; letter-spacing: 0.01em; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+    padding: 0.62rem 1.2rem; font-size: 0.875rem; font-weight: 700;
+    border: 1px solid transparent; border-radius: 0.9rem;
+    transition: background-color .15s ease, border-color .15s ease, opacity .15s ease, box-shadow .15s ease, transform .1s ease;
+    cursor: pointer;
+  }
+  .btn:active:not(:disabled) { transform: translateY(1px); }
+  .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .btn-primary { background: var(--brand); color: #fff; box-shadow: var(--shadow-soft); }
+  .btn-primary:hover:not(:disabled) { background: var(--brand-dark); }
+  .btn-outline { background: #fff; color: #453f5c; border-color: var(--border); }
+  .btn-outline:hover:not(:disabled) { background: var(--brand-light); border-color: var(--brand-300, #b6a3ff); color: var(--brand-dark); }
+  .btn-danger { background: #fff; color: #be123c; border-color: #fecdd6; }
+  .btn-danger:hover:not(:disabled) { background: #fff1f3; }
+  .btn-ghost { background: transparent; color: #6b6480; border-color: transparent; padding: 0.5rem; border-radius: 0.75rem; }
+  .btn-ghost:hover:not(:disabled) { background: #f1effa; color: #211f36; }
+
+  .icon-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 2.15rem; height: 2.15rem; border-radius: 0.75rem;
+    color: #6b6480; background: transparent; border: 1px solid transparent;
+    transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+    cursor: pointer; position: relative;
+  }
+  .icon-btn:hover { background: var(--brand-light); color: var(--brand-dark); border-color: var(--brand-light-2); }
+  .icon-btn.icon-btn-danger:hover { background: #fff1f3; color: #be123c; border-color: #fecdd6; }
+
+  .icon-btn[data-tip]::after {
+    content: attr(data-tip);
+    position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+    background: #211f36; color: #fff; font-size: 0.68rem; font-weight: 500;
+    padding: 0.3rem 0.55rem; border-radius: 0.4rem; white-space: nowrap;
+    opacity: 0; pointer-events: none; transition: opacity .12s ease;
+    z-index: 20;
+  }
+  .icon-btn[data-tip]:hover::after { opacity: 1; }
+
+  .input {
+    width: 100%; padding: 0.62rem 0.9rem; border: 1px solid var(--border);
+    border-radius: 0.8rem; font-size: 0.9rem; background: #fff; color: #211f36;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .input::placeholder { color: #9b93b5; }
+  .input:focus { outline: none; border-color: var(--ring); box-shadow: 0 0 0 3px rgba(124, 77, 255, 0.15); }
+  .input:disabled { background: #f8f7fc; color: #9b93b5; cursor: not-allowed; }
+
+  .card { background: #fff; border: 1px solid var(--border); border-radius: 1.1rem; box-shadow: var(--shadow-soft); }
+
+  .label { display:block; font-size: 0.8rem; font-weight: 700; color: #534c6e; margin-bottom: 0.3rem; }
+
+  .auth-card { background: #fff; border: 1px solid #e5e0f7; border-radius: 1.1rem; }
+
+  .linear-progress { position: relative; height: 3px; width: 100%; background: transparent; overflow: hidden; border-radius: 999px 999px 0 0; }
+  .linear-progress::before {
+    content: ''; position: absolute; top: 0; left: -40%; height: 100%; width: 40%;
+    background: var(--accent); border-radius: 999px;
+    animation: linear-progress-run 1.1s ease-in-out infinite;
+  }
+  @keyframes linear-progress-run {
+    0%   { left: -40%; width: 40%; }
+    50%  { left: 30%;  width: 55%; }
+    100% { left: 100%; width: 40%; }
+  }
+
+  .modal-backdrop { position: fixed; inset: 0; background: rgba(28, 19, 51, 0.5); backdrop-filter: blur(2px); z-index: 40; }
+  .modal-panel { position: relative; z-index: 41; background: #fff; border-radius: 1.25rem; box-shadow: 0 24px 55px rgba(28, 19, 51, 0.3); }
+
+  .dropdown-fixed { position: fixed; z-index: 45; }
+
+  /* ---- Side navigation (menggantikan tab horizontal) ---- */
+  .side-nav-item {
+    display: flex; align-items: center; gap: 0.65rem;
+    padding: 0.65rem 0.9rem; font-size: 0.86rem; font-weight: 600; color: #6b6480;
+    border-radius: 0.8rem; cursor: pointer; white-space: nowrap;
+    border-left: 3px solid transparent;
+    transition: color .15s ease, background-color .15s ease, border-color .15s ease;
+  }
+  .side-nav-item:hover { color: var(--brand-dark); background: var(--brand-light); }
+  .side-nav-item.active { color: var(--brand-dark); background: var(--brand-light); border-left-color: var(--brand); font-weight: 700; }
+
+  /* Sidebar aplikasi utama (kiri, gelap) */
+  .app-sidebar { background: var(--sidebar-bg); }
+  .app-sidebar .app-nav-item {
+    display: flex; align-items: center; gap: 0.7rem; padding: 0.7rem 1rem;
+    border-radius: 0.85rem; color: #c9c2e8; font-size: 0.875rem; font-weight: 600;
+    transition: background-color .15s ease, color .15s ease;
+  }
+  .app-sidebar .app-nav-item:hover { background: var(--sidebar-bg-hover); color: #fff; }
+  .app-sidebar .app-nav-item.active { background: var(--brand); color: #fff; }
+
+  .fade-in { animation: fadeIn .18s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(2px); } to { opacity: 1; transform: translateY(0); } }
+
+  .avatar-edit-trigger { cursor: pointer; }
+  .avatar-edit-trigger .avatar-overlay { opacity: 0; transition: opacity .15s ease; }
+  .avatar-edit-trigger:hover .avatar-overlay { opacity: 1; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .linear-progress::before, .fade-in { animation: none !important; }
+  }
+</style>
+</head>
+<body class="bg-[#F7F6FC] text-ink min-h-screen">
+
+<div id="toast-root" class="fixed top-4 right-4 z-50 flex flex-col gap-2"></div>
+<div id="app" class="min-h-screen"></div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

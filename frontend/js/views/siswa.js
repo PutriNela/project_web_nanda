@@ -40,7 +40,7 @@ function studentNav({ showBack = false, backHash = '#dashboard-siswa', title = '
   const user = Store.user;
   const ini  = initials(user?.name || '?');
   return `
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-20">
+    <header class="bg-[#ffe0eb]/75 backdrop-blur-md border-b border-[#ffb3cf]/70 sticky top-0 z-20">
       <div class="max-w-6xl mx-auto px-5 h-14 flex items-center justify-between gap-3">
         <div class="flex items-center gap-2 min-w-0">
           ${showBack ? `
@@ -105,7 +105,7 @@ function attachStudentNavEvents(backHash = '#dashboard-siswa') {
    ================================================================ */
 export async function renderSiswaDashboard() {
   app.innerHTML = studentNav() + `
-    <div id="siswa-main" class="min-h-screen bg-slate-50">
+    <div id="siswa-main" class="min-h-screen page-bg">
       <div class="max-w-6xl mx-auto px-5 py-8">
         <div class="mb-6">
           <h1 class="text-xl font-bold text-slate-900">Kelas Saya</h1>
@@ -163,36 +163,37 @@ function renderTeacherCard(teacher) {
 
   return `
     <div data-teacher-id="${teacher.teacher_id}"
-      class="bg-white border border-slate-200 rounded-xl overflow-hidden cursor-pointer
-             transition-all duration-200 hover:scale-[1.02] hover:ring-2 hover:shadow-md select-none"
-      style="--tw-ring-color: ${color};">
-      <!-- Banner -->
-      <div class="h-36 relative overflow-hidden" style="background-color: ${color};">
-        <!-- Decorative circle -->
-        <div class="absolute -right-6 -top-6 w-32 h-32 rounded-full opacity-20 bg-white"></div>
-        <div class="absolute -right-2 -bottom-8 w-24 h-24 rounded-full opacity-10 bg-white"></div>
-        <!-- Foto atau inisial di kanan atas -->
-        <div class="absolute top-3 right-3 w-10 h-10 rounded-full overflow-hidden border-2 border-white/40 bg-white/25 backdrop-blur-sm flex items-center justify-center">
+      class="rounded-2xl overflow-hidden cursor-pointer select-none
+             transition-all duration-200 hover:scale-[1.02] hover:shadow-md"
+      style="background-color: color-mix(in srgb, ${color} 10%, #fff0f5); border: 1px solid color-mix(in srgb, ${color} 25%, #ffd9e4);">
+
+      <!-- Blok warna atas -->
+      <div class="relative h-24 flex items-center justify-center" style="background-color:${color};">
+        <div class="w-14 h-14 rounded-full overflow-hidden border-[3px] border-white/70 shadow-sm flex items-center justify-center bg-white/20">
           ${hasPhoto
             ? `<img src="${teacher.photo_url}" alt="${escapeHtml(displayName)}" class="w-full h-full object-cover">`
-            : `<span class="text-white text-sm font-bold">${ini}</span>`}
+            : `<span class="text-white text-lg font-bold">${ini}</span>`}
         </div>
-        <!-- Teacher name bottom-left -->
-        <div class="absolute bottom-3 left-4 right-14">
-          <p class="text-white font-bold text-base leading-snug line-clamp-2">${escapeHtml(displayName)}</p>
-        </div>
+        <span class="absolute top-2.5 right-2.5 w-6 h-6 rounded-full bg-white/25 border border-white/50 text-white text-[10px] font-bold flex items-center justify-center">
+          ${ini}
+        </span>
       </div>
-      <!-- Body -->
-      <div class="px-4 py-3 border-t border-slate-100">
-        <p class="text-xs text-slate-500 truncate mb-2">${escapeHtml(subjects)}</p>
-        <div class="flex items-center justify-between">
-          <span class="text-xs text-slate-400">${total} ujian</span>
+
+      <!-- Bagian bawah (pink) -->
+      <div class="px-3.5 pt-3 pb-3">
+        <p class="font-heading font-bold text-sm leading-snug text-slate-800 line-clamp-2">
+          ${escapeHtml(subjects)} - ${escapeHtml(displayName)}
+        </p>
+        <p class="text-xs text-slate-400 mt-0.5">-</p>
+        <div class="flex items-center justify-between mt-1.5 gap-2">
+          <span class="text-xs text-slate-500">${total} ujian</span>
           ${pending > 0
-            ? `<span class="inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full text-white" style="background-color:${color};">
-                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
-                ${pending} belum selesai
-              </span>`
-            : `<span class="text-xs text-emerald-600 font-medium">✓ Semua selesai</span>`}
+            ? `<span class="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full text-white bg-red-500 shrink-0">
+                 ${pending} belum selesai
+               </span>`
+            : `<span class="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full text-white bg-emerald-500 shrink-0">
+                 Semua selesai
+               </span>`}
         </div>
       </div>
     </div>`;
@@ -203,7 +204,7 @@ function renderTeacherCard(teacher) {
    ================================================================ */
 export async function renderTeacherView(teacherId) {
   app.innerHTML = studentNav({ showBack: true, backHash: '#dashboard-siswa', title: 'Memuat...' }) +
-    `<div id="tv-main" class="min-h-screen bg-slate-50"><div class="py-20 text-center text-sm text-slate-400">Memuat kelas...</div></div>`;
+    `<div id="tv-main" class="min-h-screen page-bg"><div class="py-20 text-center text-sm text-slate-400">Memuat kelas...</div></div>`;
   attachStudentNavEvents('#dashboard-siswa');
 
   let teachers, allExams;
@@ -236,7 +237,7 @@ export async function renderTeacherView(teacherId) {
   );
 
   app.innerHTML = `
-    <div class="min-h-screen bg-slate-50 flex flex-col">
+    <div class="min-h-screen page-bg flex flex-col">
       ${studentNav({ showBack: true, backHash: '#dashboard-siswa', title: teacher.teacher_full_name || teacher.teacher_name })}
 
       <!-- Banner -->
@@ -418,7 +419,7 @@ let examTimerInterval = null;
 
 export async function renderExamTake(attemptId) {
   if (examTimerInterval) clearInterval(examTimerInterval);
-  app.innerHTML = `<div class="min-h-screen flex items-center justify-center bg-slate-50 text-sm text-slate-400">Memuat soal ujian...</div>`;
+  app.innerHTML = `<div class="min-h-screen flex items-center justify-center page-bg text-sm text-slate-400">Memuat soal ujian...</div>`;
 
   let data;
   try {
@@ -437,7 +438,7 @@ export async function renderExamTake(attemptId) {
   const color     = cardColor(exam.title);
 
   app.innerHTML = `
-    <div class="min-h-screen flex flex-col bg-slate-50">
+    <div class="min-h-screen flex flex-col page-bg">
       <!-- Sticky header -->
       <header class="bg-white border-b border-slate-200 sticky top-0 z-20">
         <div class="max-w-3xl mx-auto px-5 h-14 flex items-center justify-between gap-4">
@@ -632,7 +633,7 @@ function renderExamResult(result) {
   const border = passed ? '#a7f3d0' : '#fde68a';
 
   app.innerHTML = `
-    <div class="min-h-screen bg-slate-50 flex items-center justify-center px-4">
+    <div class="min-h-screen page-bg flex items-center justify-center px-4">
       <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-8 max-w-sm w-full text-center">
         <!-- Icon -->
         <div class="w-16 h-16 rounded-2xl mx-auto mb-5 flex items-center justify-center"

@@ -77,24 +77,25 @@ export function renderLogin() {
     <div class="min-h-screen flex items-center justify-center px-4">
       <div class="w-full max-w-sm">
         <div class="text-center mb-7">
-          <h1 class="text-2xl font-bold tracking-tight text-slate-800">Selamat Datang!</h1>
-          <p class="text-sm text-slate-500 mt-1">Masuk ke sistem ujian berbasis komputer</p>
+          <div class="w-14 h-14 rounded-2xl bg-brand-500 mx-auto mb-3 flex items-center justify-center text-2xl shadow-[var(--shadow-soft)]">🐻</div>
+          <h1 class="text-2xl font-bold tracking-tight text-ink font-heading">Halo Sahabat Pintar!</h1>
+          <p class="text-sm text-slate-500 mt-1">Ayo masuk ke ruang ujianmu</p>
         </div>
         <div class="auth-card p-6 relative overflow-hidden">
           <div id="login-progress" class="linear-progress absolute top-0 left-0 hidden"></div>
           <form id="login-form" class="space-y-4">
             <div>
               <label class="label">Username</label>
-              <input class="input" type="text" name="username" required autocomplete="username">
+              <input class="input" type="text" name="username" required autocomplete="username" placeholder="Tulis nama penggunamu">
             </div>
             ${passwordFieldHtml({ name: 'password', label: 'Password', autocomplete: 'current-password' })}
             <button type="submit" id="login-submit-btn" class="btn btn-primary w-full">
-              <span id="login-submit-label" data-idle-text="Masuk">Masuk</span>
+              <span id="login-submit-label" data-idle-text="Masuk Yuk! 🚀">Masuk Yuk! 🚀</span>
             </button>
           </form>
           <p class="text-sm text-slate-500 mt-4 text-center">
             Belum punya akun?
-            <a href="#register" class="text-[#5b2ad1] font-semibold hover:underline">Daftar di sini</a>
+            <a href="#register" class="text-[#e94a76] font-semibold hover:underline">Daftar di sini</a>
           </p>
         </div>
       </div>
@@ -143,7 +144,9 @@ export function renderRegister() {
     <div class="min-h-screen flex items-center justify-center px-4 py-8">
       <div class="w-full max-w-sm">
         <div class="text-center mb-7">
-          <h1 class="text-2xl font-bold tracking-tight text-slate-800">Daftar Akun</h1>
+          <div class="w-14 h-14 rounded-2xl bg-brand-500 mx-auto mb-3 flex items-center justify-center text-2xl shadow-[var(--shadow-soft)]">📚</div>
+          <h1 class="text-2xl font-bold tracking-tight text-ink font-heading">Daftar Akun</h1>
+          <p class="text-sm text-slate-500 mt-1">Yuk gabung di ruang belajar UjiCerdas</p>
         </div>
         <div class="auth-card p-6 relative overflow-hidden">
           <div id="register-progress" class="linear-progress absolute top-0 left-0 hidden"></div>
@@ -177,7 +180,7 @@ export function renderRegister() {
           </form>
           <p class="text-sm text-slate-500 mt-4 text-center">
             Sudah punya akun?
-            <a href="#login" class="text-[#5b2ad1] font-semibold hover:underline">Masuk di sini</a>
+            <a href="#login" class="text-[#e94a76] font-semibold hover:underline">Masuk di sini</a>
           </p>
         </div>
       </div>
@@ -226,8 +229,8 @@ export function renderVerifyOtp(username) {
     <div class="min-h-screen flex items-center justify-center px-4 py-8">
       <div class="w-full max-w-sm">
         <div class="text-center mb-7">
-          <div class="w-11 h-11 rounded-xl bg-[#5b2ad1] mx-auto mb-3 flex items-center justify-center text-white font-extrabold">UC</div>
-          <h1 class="text-2xl font-bold tracking-tight text-slate-800">Verifikasi Email</h1>
+          <div class="w-11 h-11 rounded-xl bg-[#e94a76] mx-auto mb-3 flex items-center justify-center text-white font-extrabold font-heading">UC</div>
+          <h1 class="text-2xl font-bold tracking-tight text-ink font-heading">Verifikasi Email</h1>
           <p class="text-sm text-slate-500 mt-1">Masukkan kode OTP yang dikirim ke email Gmail Anda</p>
         </div>
         <div class="auth-card p-6 relative overflow-hidden">
@@ -246,7 +249,7 @@ export function renderVerifyOtp(username) {
           <button id="resend-otp-btn" type="button" class="btn btn-outline w-full mt-3" disabled>Kirim Ulang OTP (3:00)</button>
           <p class="text-sm text-slate-500 mt-4 text-center">
             Salah akun?
-            <a href="#register" class="text-[#5b2ad1] font-semibold hover:underline">Daftar ulang</a>
+            <a href="#register" class="text-[#e94a76] font-semibold hover:underline">Daftar ulang</a>
           </p>
         </div>
       </div>

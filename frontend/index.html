@@ -9,20 +9,23 @@
   tailwind.config = {
     theme: {
       extend: {
-        fontFamily: { sans: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+        fontFamily: {
+          sans: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+          heading: ['"Baloo 2"', '"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        },
         colors: {
-          ink: '#211f36',
+          ink: '#3a1b2c',
           brand: {
-            50:  '#f4f2ff',
-            100: '#ebe7ff',
-            200: '#d5cbff',
-            300: '#b6a3ff',
-            400: '#9575ff',
-            500: '#7c4dff',
-            600: '#6631e8',
-            700: '#5324bd',
-            800: '#421d96',
-            900: '#341876',
+            50:  '#fff0f5',
+            100: '#ffe0eb',
+            200: '#ffc2d6',
+            300: '#ff9ebc',
+            400: '#f9789e',
+            500: '#ec5a85',
+            600: '#d63f6c',
+            700: '#b12f56',
+            800: '#8a2444',
+            900: '#6b1c36',
           },
         },
       }
@@ -30,28 +33,38 @@
   };
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --brand-dark: #421d96;
-    --brand: #5b2ad1;
-    --brand-mid: #6631e8;
-    --brand-light: #f4f2ff;
-    --brand-light-2: #ebe7ff;
-    --accent: #f59e0b;
-    --ring: #7c4dff;
-    --border: #e9e4fb;
-    --sidebar-bg: #1c1333;
-    --sidebar-bg-hover: #2a1f4d;
-    --shadow-soft: 0 1px 2px rgba(66, 29, 150, 0.05), 0 6px 18px rgba(66, 29, 150, 0.07);
-    --shadow-soft-hover: 0 3px 8px rgba(66, 29, 150, 0.08), 0 14px 28px rgba(66, 29, 150, 0.12);
+    --brand-dark: #8a2444;
+    --brand: #e94a76;
+    --brand-mid: #d63f6c;
+    --brand-light: #fff0f5;
+    --brand-light-2: #ffe0eb;
+    --accent: #f9a826;
+    --ring: #ec5a85;
+    --border: #ffd9e4;
+    --sidebar-bg: rgba(177, 47, 86, 0.25);
+    --sidebar-bg-hover: rgba(138, 36, 68, 0.35);
+    --shadow-soft: 0 1px 2px rgba(138, 36, 68, 0.06), 0 6px 18px rgba(138, 36, 68, 0.08);
+    --shadow-soft-hover: 0 3px 8px rgba(138, 36, 68, 0.1), 0 14px 28px rgba(138, 36, 68, 0.14);
   }
 
   body { font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3, .font-heading { font-family: 'Baloo 2', 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif; }
+
+  /* ---- Tema "cuddly bear" pink: dipakai di body & wrapper halaman penuh ---- */
+  body,
+  .page-bg {
+    background-color: #FFD3E4;
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNjAiIGhlaWdodD0iMjYwIj4KPHRleHQgeD0iMTIiIHk9IjQ2IiBmb250LXNpemU9IjMwIiBvcGFjaXR5PSIwLjQiPvCfkLs8L3RleHQ+Cjx0ZXh0IHg9IjE1MCIgeT0iMzQiIGZvbnQtc2l6ZT0iMjAiIG9wYWNpdHk9IjAuMzUiPvCfkp88L3RleHQ+Cjx0ZXh0IHg9IjgwIiB5PSIxMTAiIGZvbnQtc2l6ZT0iMTgiIG9wYWNpdHk9IjAuMzUiPuKtkDwvdGV4dD4KPHRleHQgeD0iMTk1IiB5PSIxNTAiIGZvbnQtc2l6ZT0iMjYiIG9wYWNpdHk9IjAuNCI+8J+QuzwvdGV4dD4KPHRleHQgeD0iMzAiIHk9IjIwMCIgZm9udC1zaXplPSIyMCIgb3BhY2l0eT0iMC4zNSI+4pyoPC90ZXh0Pgo8dGV4dCB4PSIxNTAiIHk9IjIyNSIgZm9udC1zaXplPSIxOCIgb3BhY2l0eT0iMC4zNSI+8J+SlTwvdGV4dD4KPHRleHQgeD0iMjE1IiB5PSI3MCIgZm9udC1zaXplPSIxNiIgb3BhY2l0eT0iMC4zIj7wn5KdPC90ZXh0Pgo8L3N2Zz4=");
+    background-repeat: repeat;
+    background-size: 220px 220px;
+  }
 
   ::-webkit-scrollbar { width: 8px; height: 8px; }
-  ::-webkit-scrollbar-thumb { background: #d5cbff; border-radius: 999px; }
-  ::-webkit-scrollbar-thumb:hover { background: #b6a3ff; }
+  ::-webkit-scrollbar-thumb { background: #ffc2d6; border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: #ff9ebc; }
 
   .table-cell { padding: 0.9rem 1.15rem; border-bottom: 1px solid var(--border); }
   .table-cell-num { text-align: center; font-variant-numeric: tabular-nums; }
@@ -109,7 +122,7 @@
 
   .label { display:block; font-size: 0.8rem; font-weight: 700; color: #534c6e; margin-bottom: 0.3rem; }
 
-  .auth-card { background: #fff; border: 1px solid #e5e0f7; border-radius: 1.1rem; }
+  .auth-card { background: #fff; border: 1px solid #ffe0eb; border-radius: 1.1rem; }
 
   .linear-progress { position: relative; height: 3px; width: 100%; background: transparent; overflow: hidden; border-radius: 999px 999px 0 0; }
   .linear-progress::before {
@@ -123,8 +136,8 @@
     100% { left: 100%; width: 40%; }
   }
 
-  .modal-backdrop { position: fixed; inset: 0; background: rgba(28, 19, 51, 0.5); backdrop-filter: blur(2px); z-index: 40; }
-  .modal-panel { position: relative; z-index: 41; background: #fff; border-radius: 1.25rem; box-shadow: 0 24px 55px rgba(28, 19, 51, 0.3); }
+  .modal-backdrop { position: fixed; inset: 0; background: rgba(58, 16, 48, 0.45); backdrop-filter: blur(2px); z-index: 40; }
+  .modal-panel { position: relative; z-index: 41; background: #fff; border-radius: 1.25rem; box-shadow: 0 24px 55px rgba(58, 16, 48, 0.28); }
 
   .dropdown-fixed { position: fixed; z-index: 45; }
 
@@ -139,8 +152,9 @@
   .side-nav-item:hover { color: var(--brand-dark); background: var(--brand-light); }
   .side-nav-item.active { color: var(--brand-dark); background: var(--brand-light); border-left-color: var(--brand); font-weight: 700; }
 
-  /* Sidebar aplikasi utama (kiri, gelap) */
-  .app-sidebar { background: var(--sidebar-bg); }
+  /* Sidebar aplikasi utama (kiri, pink semi-transparan + blur) */
+  .app-sidebar { background: var(--sidebar-bg); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+  .app-sidebar .app-nav-item, .app-sidebar p, .app-sidebar span { text-shadow: 0 1px 3px rgba(58, 16, 48, 0.35); }
   .app-sidebar .app-nav-item {
     display: flex; align-items: center; gap: 0.7rem; padding: 0.7rem 1rem;
     border-radius: 0.85rem; color: #c9c2e8; font-size: 0.875rem; font-weight: 600;
@@ -161,7 +175,7 @@
   }
 </style>
 </head>
-<body class="bg-[#F7F6FC] text-ink min-h-screen">
+<body class="text-ink min-h-screen">
 
 <div id="toast-root" class="fixed top-4 right-4 z-50 flex flex-col gap-2"></div>
 <div id="app" class="min-h-screen"></div>

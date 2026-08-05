@@ -27,7 +27,7 @@ async function _renderTeacherProfileEdit() {
 
   const hasPhoto = !!profile?.photo_url;
   app.innerHTML = `
-    <div class="min-h-screen bg-slate-50 flex flex-col">
+    <div class="min-h-screen page-bg flex flex-col">
       ${_profileNav(user)}
       <main class="flex-1 max-w-3xl w-full mx-auto px-6 py-10">
         <div class="mb-8">
@@ -161,7 +161,7 @@ async function _renderStudentProfileEdit() {
   }
 
   app.innerHTML = `
-    <div class="min-h-screen bg-slate-50 flex flex-col">
+    <div class="min-h-screen page-bg flex flex-col">
       ${_profileNav(user)}
       <main class="flex-1 flex items-center justify-center px-6 py-10">
         <div class="w-full max-w-lg">
@@ -235,7 +235,7 @@ export async function renderCompleteProfile() {
 
   const user = Store.user;
   app.innerHTML = `
-    <div class="min-h-screen bg-slate-50 flex flex-col">
+    <div class="min-h-screen page-bg flex flex-col">
       ${_profileNav(user)}
       <main class="flex-1 max-w-3xl w-full mx-auto px-6 py-10">
         <div class="mb-8">
@@ -354,7 +354,7 @@ export async function renderCompleteProfile() {
 export async function renderCompleteStudentProfile() {
   const user = Store.user;
   app.innerHTML = `
-    <div class="min-h-screen bg-slate-50 flex flex-col">
+    <div class="min-h-screen page-bg flex flex-col">
       ${_profileNav(user)}
       <main class="flex-1 flex items-center justify-center px-6 py-10">
         <div class="w-full max-w-lg">

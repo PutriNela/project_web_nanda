@@ -1,7 +1,14 @@
 import { app } from '../core/dom.js';
 import { api, apiUpload } from '../core/api.js';
 import { toast, escapeHtml, fmtScore, enableImageLightbox } from '../core/utils.js';
-import { shell, attachLogout } from '../layout/shell.js';
+import { shell, attachLogout, attachShellNav } from '../layout/shell.js';
+
+const GURU_NAV_ICON = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h3m-7 5h10a2 2 0 002-2V7.414a1 1 0 00-.293-.707l-3.414-3.414A1 1 0 0012.586 3H5a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>`;
+const GURU_NAV_ITEMS = [{ key: 'dashboard', label: 'Ujian Saya', icon: GURU_NAV_ICON }];
+
+function attachGuruShellNav() {
+  attachShellNav(() => navigate('#dashboard-guru'));
+}
 import { navigate } from '../core/router.js';
 import { Store } from '../core/store.js';
 import { renderBankSoalBrowser } from '../core/bankSoalBrowser.js';
@@ -15,8 +22,9 @@ function initials(name) {
 
 /* ---- Dashboard utama ---- */
 export async function renderGuruDashboard() {
-  app.innerHTML = shell('Guru', 'dashboard', `<div id="guru-content" class="text-sm text-slate-500">Memuat data...</div>`);
+  app.innerHTML = shell('Guru', GURU_NAV_ITEMS, 'dashboard', `<div id="guru-content" class="text-sm text-slate-500">Memuat data...</div>`);
   attachLogout();
+  attachGuruShellNav();
 
   let exams = [], subjects = [], profile = null;
   try {
@@ -68,7 +76,7 @@ export async function renderGuruDashboard() {
               </div>
               ${profile?.subjects?.length
                 ? `<div class="flex flex-wrap gap-1.5 mt-2">
-                    ${profile.subjects.map(s => `<span class="badge border-[#d5cbff] text-[#5b2ad1] bg-[#f4f2ff]">${escapeHtml(s.subject_name)}</span>`).join('')}
+                    ${profile.subjects.map(s => `<span class="badge border-[#d5cbff] text-[#e94a76] bg-[#fff0f5]">${escapeHtml(s.subject_name)}</span>`).join('')}
                   </div>`
                 : '<p class="text-xs text-slate-400 mt-1">Belum ada mata kuliah yang ditetapkan.</p>'}
             </div>
@@ -196,7 +204,7 @@ export async function renderGuruDashboard() {
                   <td class="table-cell table-cell-num">${e.duration} menit</td>
                   <td class="table-cell table-cell-num">${fmtScore(e.minimum_score)}</td>
                   <td class="table-cell">${e.is_active
-                    ? '<span class="badge border-[#d5cbff] text-[#5b2ad1] bg-[#f4f2ff]">Aktif</span>'
+                    ? '<span class="badge border-[#d5cbff] text-[#e94a76] bg-[#fff0f5]">Aktif</span>'
                     : '<span class="badge border-slate-300 text-slate-500">Nonaktif</span>'}</td>
                   <td class="table-cell whitespace-nowrap">
                     <div class="flex items-center gap-1.5 justify-end">
@@ -205,11 +213,11 @@ export async function renderGuruDashboard() {
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10 6a2 2 0 100-4 2 2 0 000 4zm0 6a2 2 0 100-4 2 2 0 000 4zm0 6a2 2 0 100-4 2 2 0 000 4z"/></svg>
                       </button>
                       <div class="hidden dropdown-fixed card p-1.5 w-44 text-left" data-menu-panel="${e.id}">
-                        <a href="#exam-assign/${e.id}" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg text-slate-600 hover:bg-[#f4f2ff] hover:text-[#5b2ad1]">
+                        <a href="#exam-assign/${e.id}" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg text-slate-600 hover:bg-[#fff0f5] hover:text-[#e94a76]">
                           <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                           Tugaskan Siswa
                         </a>
-                        <a href="#exam-scores/${e.id}" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg text-slate-600 hover:bg-[#f4f2ff] hover:text-[#5b2ad1]">
+                        <a href="#exam-scores/${e.id}" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg text-slate-600 hover:bg-[#fff0f5] hover:text-[#e94a76]">
                           <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                           Lihat Nilai
                         </a>
@@ -352,8 +360,9 @@ export async function renderGuruDashboard() {
 
 /* ---- Exam Assign ---- */
 export async function renderExamAssign(examId) {
-  app.innerHTML = shell('Guru', 'assign', `<div id="assign-content" class="text-sm text-slate-500">Memuat data...</div>`);
+  app.innerHTML = shell('Guru', GURU_NAV_ITEMS, 'dashboard', `<div id="assign-content" class="text-sm text-slate-500">Memuat data...</div>`);
   attachLogout();
+  attachGuruShellNav();
 
   let exam, assigned, assignable;
   try {
@@ -484,7 +493,7 @@ const DIFFICULTY_OPTIONS = ['Mudah', 'Sedang', 'Sulit'];
 
 function difficultyBadge(difficulty) {
   const map = {
-    Mudah: 'border-[#d5cbff] text-[#5b2ad1] bg-[#f4f2ff]',
+    Mudah: 'border-[#d5cbff] text-[#e94a76] bg-[#fff0f5]',
     Sedang: 'border-amber-300 text-amber-700 bg-amber-50',
     Sulit: 'border-red-300 text-red-700 bg-red-50',
   };
@@ -492,8 +501,9 @@ function difficultyBadge(difficulty) {
 }
 
 export async function renderExamBuilder(examId) {
-  app.innerHTML = shell('Guru', 'builder', `<div id="builder-content" class="text-sm text-slate-500">Memuat soal...</div>`);
+  app.innerHTML = shell('Guru', GURU_NAV_ITEMS, 'dashboard', `<div id="builder-content" class="text-sm text-slate-500">Memuat soal...</div>`);
   attachLogout();
+  attachGuruShellNav();
 
   let exam, questions, subjects, profile;
   try {
@@ -950,8 +960,9 @@ function renderQuestionCard(q, idx, myId) {
 
 /* ---- Pantauan Nilai ---- */
 export async function renderExamScores(examId) {
-  app.innerHTML = shell('Guru', 'scores', `<div id="scores-content" class="text-sm text-slate-500">Memuat nilai...</div>`);
+  app.innerHTML = shell('Guru', GURU_NAV_ITEMS, 'dashboard', `<div id="scores-content" class="text-sm text-slate-500">Memuat nilai...</div>`);
   attachLogout();
+  attachGuruShellNav();
 
   let exam, summary;
   try {

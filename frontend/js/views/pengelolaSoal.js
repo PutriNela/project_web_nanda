@@ -1,13 +1,16 @@
 import { app } from '../core/dom.js';
 import { api, apiUpload } from '../core/api.js';
 import { toast, escapeHtml, enableImageLightbox } from '../core/utils.js';
-import { shell, attachLogout } from '../layout/shell.js';
+import { shell, attachLogout, attachShellNav } from '../layout/shell.js';
 import { renderBankSoalBrowser } from '../core/bankSoalBrowser.js';
+
+const PS_NAV_ICON = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>`;
+const PS_NAV_ITEMS = [{ key: 'dashboard', label: 'Bank Soal', icon: PS_NAV_ICON }];
 
 const OPTION_LETTERS = ['A', 'B', 'C', 'D', 'E'];
 const DIFFICULTY_OPTIONS = ['Mudah', 'Sedang', 'Sulit'];
 const DIFFICULTY_BADGE_MAP = {
-  Mudah:  'border-[#d5cbff] text-[#5b2ad1] bg-[#f4f2ff]',
+  Mudah:  'border-[#d5cbff] text-[#e94a76] bg-[#fff0f5]',
   Sedang: 'border-amber-300 text-amber-700 bg-amber-50',
   Sulit:  'border-red-300 text-red-700 bg-red-50',
 };
@@ -21,8 +24,9 @@ function difficultyBadge(difficulty) {
  * Tidak punya akses ujian, penilaian, atau data siswa sama sekali.
  */
 export async function renderPengelolaSoalDashboard() {
-  app.innerHTML = shell('Pengelola Soal', 'dashboard', `<div id="ps-content" class="text-sm text-slate-500">Memuat Bank Soal...</div>`);
+  app.innerHTML = shell('Pengelola Soal', PS_NAV_ITEMS, 'dashboard', `<div id="ps-content" class="text-sm text-slate-500">Memuat Bank Soal...</div>`);
   attachLogout();
+  attachShellNav(() => {});
 
   let subjects = [];
   try {

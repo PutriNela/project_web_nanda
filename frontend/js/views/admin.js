@@ -2,13 +2,13 @@ import { app } from '../core/dom.js';
 import { Store } from '../core/store.js';
 import { api } from '../core/api.js';
 import { toast, escapeHtml } from '../core/utils.js';
-import { shell, attachLogout } from '../layout/shell.js';
+import { shell, attachLogout, attachShellNav } from '../layout/shell.js';
 import { renderBankSoalBrowser } from '../core/bankSoalBrowser.js';
 
 export function statusBadge(status) {
   const map = {
     pending:  'border-amber-300 text-amber-700 bg-amber-50',
-    approved: 'border-[#d5cbff] text-[#5b2ad1] bg-[#f4f2ff]',
+    approved: 'border-[#d5cbff] text-[#e94a76] bg-[#fff0f5]',
     rejected: 'border-red-300 text-red-700 bg-red-50',
   };
   const labelMap = { pending: 'Menunggu', approved: 'Disetujui', rejected: 'Ditolak' };
@@ -17,10 +17,14 @@ export function statusBadge(status) {
 
 let ADMIN_STATE = { tab: 'users', userFilter: 'pending' };
 
-export async function renderAdminDashboard() {
-  app.innerHTML = shell('Admin', 'dashboard', `<div id="admin-content" class="text-sm text-slate-500">Memuat data...</div>`);
-  attachLogout();
+const ADMIN_NAV_ICONS = {
+  users: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-4a4 4 0 10-4-4 4 4 0 004 4zm6 4a4 4 0 10-4-4"/></svg>`,
+  assign: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>`,
+  academic: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.42A12.02 12.02 0 0122 9v3.5a1 1 0 01-.55.9L12 18l-9.45-4.6a1 1 0 01-.55-.9V9a12.02 12.02 0 013.84-1.42L12 14z"/></svg>`,
+  banksoal: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>`,
+};
 
+export async function renderAdminDashboard() {
   let pending = [], allUsers = [], subjects = [], teachers = [], profileRequests = [];
   try {
     [pending, allUsers, subjects, teachers, profileRequests] = await Promise.all([
@@ -31,55 +35,36 @@ export async function renderAdminDashboard() {
       api('/profile/requests'),
     ]);
   } catch (err) {
-    document.getElementById('admin-content').innerHTML = `<p class="text-red-600 text-sm">${escapeHtml(err.message)}</p>`;
+    app.innerHTML = shell('Admin', [], 'users', `<p class="text-red-600 text-sm">${escapeHtml(err.message)}</p>`);
+    attachLogout();
     return;
   }
 
   const data = { pending, allUsers, subjects, teachers, profileRequests };
-  const content = document.getElementById('admin-content');
+  const usersBadge = pending.length + profileRequests.length;
 
-  content.innerHTML = `
-    <div class="grid md:grid-cols-[15rem_1fr] gap-6 items-start">
-      <!-- SIDE NAVIGATION -->
-      <nav class="card p-3 flex md:flex-col gap-1.5 overflow-x-auto md:overflow-visible md:sticky md:top-24">
-        <button type="button" class="side-nav-item" data-tab="users">
-          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-4a4 4 0 10-4-4 4 4 0 004 4zm6 4a4 4 0 10-4-4"/></svg>
-          <span class="flex-1">Manajemen Pengguna</span>
-          ${(pending.length + profileRequests.length) > 0
-            ? `<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-bold align-middle shrink-0">${pending.length + profileRequests.length}</span>`
-            : ''}
-        </button>
-        <button type="button" class="side-nav-item" data-tab="assign">
-          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-          <span class="flex-1">Penugasan Guru &amp; Siswa</span>
-        </button>
-        <button type="button" class="side-nav-item" data-tab="academic">
-          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.42A12.02 12.02 0 0122 9v3.5a1 1 0 01-.55.9L12 18l-9.45-4.6a1 1 0 01-.55-.9V9a12.02 12.02 0 013.84-1.42L12 14z"/></svg>
-          <span class="flex-1">Data Akademik</span>
-        </button>
-        <button type="button" class="side-nav-item" data-tab="banksoal">
-          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-          <span class="flex-1">Bank Soal</span>
-        </button>
-      </nav>
+  const navItems = [
+    { key: 'users',    label: 'Manajemen Pengguna',       icon: ADMIN_NAV_ICONS.users,    badge: usersBadge || null },
+    { key: 'assign',   label: 'Penugasan Guru & Siswa',    icon: ADMIN_NAV_ICONS.assign },
+    { key: 'academic', label: 'Data Akademik',             icon: ADMIN_NAV_ICONS.academic },
+    { key: 'banksoal', label: 'Bank Soal',                 icon: ADMIN_NAV_ICONS.banksoal },
+  ];
 
-      <div id="admin-tab-panel" class="fade-in min-w-0"></div>
-    </div>
-  `;
+  app.innerHTML = shell('Admin', navItems, ADMIN_STATE.tab || 'users',
+    `<div id="admin-tab-panel" class="fade-in min-w-0"></div>`);
+  attachLogout();
 
   const panel = document.getElementById('admin-tab-panel');
-  const tabButtons = content.querySelectorAll('[data-tab]');
 
   function setTab(tab) {
     ADMIN_STATE.tab = tab;
-    tabButtons.forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
     if (tab === 'users') renderUsersTab(panel, data);
     if (tab === 'assign') renderAssignTab(panel, data);
     if (tab === 'academic') renderAcademicTab(panel, data);
     if (tab === 'banksoal') renderBankSoalTab(panel, data);
   }
 
-  tabButtons.forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
+  attachShellNav(setTab);
   setTab(ADMIN_STATE.tab || 'users');
 }
 
@@ -109,7 +94,7 @@ function renderUsersTab(panel, data) {
     <div id="users-filter-content"></div>
 
     <!-- FORM ISI PROFIL GURU (tersembunyi, muncul saat klik "Isi Profil") -->
-    <div id="fill-profile-wrap" class="hidden card p-5 mt-6 border-l-4 border-l-[#5b2ad1]">
+    <div id="fill-profile-wrap" class="hidden card p-5 mt-6 border-l-4 border-l-[#e94a76]">
       <h2 class="font-bold mb-1 text-slate-800">Isi Profil Guru: <span id="fill-profile-name" class="font-normal"></span></h2>
       <p class="text-xs text-slate-500 mb-4">Data ini akan disimpan atas nama guru yang bersangkutan.</p>
       <form id="fill-profile-form" class="space-y-4">
@@ -489,7 +474,7 @@ function renderAcademicTab(panel, data) {
    (edit hanya untuk guru penulis asli, dikelola dari dashboard Guru).
    ========================================================= */
 const DIFFICULTY_BADGE_MAP = {
-  Mudah:  'border-[#d5cbff] text-[#5b2ad1] bg-[#f4f2ff]',
+  Mudah:  'border-[#d5cbff] text-[#e94a76] bg-[#fff0f5]',
   Sedang: 'border-amber-300 text-amber-700 bg-amber-50',
   Sulit:  'border-red-300 text-red-700 bg-red-50',
 };

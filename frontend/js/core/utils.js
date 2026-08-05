@@ -7,7 +7,7 @@ export function toast(message, type = 'info') {
   const colors = {
     info: 'bg-slate-800 text-white',
     error: 'bg-red-600 text-white',
-    success: 'bg-[#5b2ad1] text-white',
+    success: 'bg-[#e94a76] text-white',
   };
   const el = document.createElement('div');
   el.className = `${colors[type]} px-4 py-2.5 text-sm font-medium rounded-xl shadow-lg max-w-sm fade-in`;

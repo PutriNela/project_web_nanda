@@ -9,21 +9,37 @@ function initials(name) {
 }
 
 /**
- * shell(roleLabel, activeLabel, contentHtml)
- * Bungkus konten dashboard dengan sidebar kiri (identitas, keluar) + area konten.
+ * shell(roleLabel, navItems, activeKey, contentHtml)
+ *
+ * Bungkus konten dashboard dengan sidebar kiri (identitas, navigasi, keluar) + area konten.
+ *
+ * navItems: array of { key, label, icon (svg string), badge (number|string, optional) }
+ *   Setiap item dirender sebagai tombol navigasi di sidebar ("navigasi card").
+ *   Klik akan otomatis menonaktifkan item lain & mengaktifkan yang diklik (lihat attachShellNav).
+ * activeKey: key item yang sedang aktif di awal render.
  */
-export function shell(roleLabel, activeLabel, contentHtml) {
+export function shell(roleLabel, navItems, activeKey, contentHtml) {
   const user = Store.user;
+  const items = Array.isArray(navItems) ? navItems : [];
+
+  const navHtml = items.map(item => `
+    <button type="button" data-nav-key="${item.key}"
+            class="app-nav-item w-full text-left ${item.key === activeKey ? 'active' : ''}">
+      <span class="w-4 h-4 shrink-0 [&>svg]:w-4 [&>svg]:h-4">${item.icon || ''}</span>
+      <span class="flex-1 truncate">${escapeHtml(item.label)}</span>
+      ${item.badge ? `<span class="inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold shrink-0">${item.badge}</span>` : ''}
+    </button>
+  `).join('');
 
   return `
     <div class="min-h-screen flex">
       <!-- SIDEBAR -->
       <aside class="app-sidebar w-64 shrink-0 hidden md:flex flex-col py-6 px-4">
         <div class="flex items-center gap-2.5 px-2 mb-8">
-          <div class="w-9 h-9 rounded-xl bg-brand-500 flex items-center justify-center font-extrabold text-white text-sm">UC</div>
+          <div class="w-9 h-9 rounded-xl bg-brand-500 flex items-center justify-center font-extrabold text-white text-sm font-heading">UC</div>
           <div class="leading-tight">
-            <p class="text-white font-extrabold text-sm">UjiCerdas</p>
-            <p class="text-[11px] text-brand-200">Sistem Ujian CBT</p>
+            <p class="text-white font-extrabold text-sm font-heading">UjiCerdas</p>
+            <p class="text-[11px] text-brand-200">Ruang Belajar Seru</p>
           </div>
         </div>
 
@@ -41,11 +57,8 @@ export function shell(roleLabel, activeLabel, contentHtml) {
           </div>
         </div>
 
-        <nav class="flex-1 space-y-1 px-2">
-          <span class="app-nav-item active">
-            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-            Beranda
-          </span>
+        <nav class="flex-1 space-y-1 px-2 overflow-y-auto">
+          ${navHtml}
         </nav>
 
         <button id="btn-logout" type="button" class="app-nav-item w-full mt-4 !text-rose-200 hover:!bg-rose-500/20 hover:!text-rose-100">
@@ -64,6 +77,16 @@ export function shell(roleLabel, activeLabel, contentHtml) {
             </div>
             <button id="btn-logout-mobile" class="btn btn-outline !py-1.5 !px-3 !text-xs">Keluar</button>
           </div>
+          ${items.length > 1 ? `
+          <div class="px-5 pb-3 flex gap-2 overflow-x-auto">
+            ${items.map(item => `
+              <button type="button" data-nav-key-mobile="${item.key}"
+                      class="side-nav-item shrink-0 !py-1.5 !px-3 !text-xs ${item.key === activeKey ? 'active' : ''}">
+                ${escapeHtml(item.label)}
+                ${item.badge ? `<span class="ml-1 opacity-80">(${item.badge})</span>` : ''}
+              </button>
+            `).join('')}
+          </div>` : ''}
         </header>
         <main class="flex-1 w-full mx-auto px-5 md:px-8 py-7 md:py-8 max-w-6xl">
           ${contentHtml}
@@ -97,4 +120,33 @@ export function attachLogout() {
   document.getElementById('btn-logout')?.addEventListener('click', doLogout);
   document.getElementById('btn-logout-mobile')?.addEventListener('click', doLogout);
   document.getElementById('btn-header-profile')?.addEventListener('click', () => navigate('#profile'));
+}
+
+/**
+ * attachShellNav(onSelect)
+ * Pasang event listener untuk item navigasi sidebar (desktop) & tab mobile.
+ * Otomatis toggle class "active" pada tombol yang diklik, lalu panggil onSelect(key).
+ * Dipanggil setelah shell() di-render ke DOM, sekali per render.
+ */
+export function attachShellNav(onSelect) {
+  const desktopBtns = document.querySelectorAll('[data-nav-key]');
+  const mobileBtns  = document.querySelectorAll('[data-nav-key-mobile]');
+
+  function setActive(key) {
+    desktopBtns.forEach(b => b.classList.toggle('active', b.dataset.navKey === key));
+    mobileBtns.forEach(b => b.classList.toggle('active', b.dataset.navKeyMobile === key));
+  }
+
+  desktopBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      setActive(btn.dataset.navKey);
+      onSelect(btn.dataset.navKey);
+    });
+  });
+  mobileBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      setActive(btn.dataset.navKeyMobile);
+      onSelect(btn.dataset.navKeyMobile);
+    });
+  });
 }

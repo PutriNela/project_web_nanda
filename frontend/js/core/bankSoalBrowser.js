@@ -14,7 +14,7 @@ import { escapeHtml } from './utils.js';
 
 const DIFFICULTY_LEVELS = ['Mudah', 'Sedang', 'Sulit'];
 const DIFFICULTY_STYLES = {
-  Mudah:  'border-[#d5cbff] text-[#5b2ad1] bg-[#f4f2ff]',
+  Mudah:  'border-[#d5cbff] text-[#e94a76] bg-[#fff0f5]',
   Sedang: 'border-amber-300 text-amber-700 bg-amber-50',
   Sulit:  'border-red-300 text-red-700 bg-red-50',
 };
@@ -58,9 +58,9 @@ export function renderBankSoalBrowser(root, opts) {
 
   function renderBreadcrumb() {
     if (!state.subjectId) return '';
-    const parts = [`<button type="button" class="hover:underline hover:text-[#5b2ad1]" data-bsb-crumb="subject">Pilih Mapel</button>`];
+    const parts = [`<button type="button" class="hover:underline hover:text-[#e94a76]" data-bsb-crumb="subject">Pilih Mapel</button>`];
     parts.push(`<span class="text-slate-300">/</span>`);
-    parts.push(`<button type="button" class="hover:underline hover:text-[#5b2ad1] ${!state.difficulty ? 'font-semibold text-slate-700' : ''}" data-bsb-crumb="difficulty">${escapeHtml(state.subjectName)}</button>`);
+    parts.push(`<button type="button" class="hover:underline hover:text-[#e94a76] ${!state.difficulty ? 'font-semibold text-slate-700' : ''}" data-bsb-crumb="difficulty">${escapeHtml(state.subjectName)}</button>`);
     if (state.difficulty) {
       parts.push(`<span class="text-slate-300">/</span>`);
       parts.push(`<span class="font-semibold text-slate-700">${escapeHtml(state.difficulty)}</span>`);
@@ -78,7 +78,7 @@ export function renderBankSoalBrowser(root, opts) {
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
           ${subjects.map(s => `
             <button type="button" data-bsb-subject="${s.id}" data-bsb-subject-name="${escapeHtml(s.subject_name)}"
-              class="flex items-center justify-between gap-2 px-4 py-3 rounded-xl border border-slate-200 text-left text-sm font-medium text-slate-700 hover:border-[#b6a3ff] hover:bg-[#f4f2ff] hover:text-[#5b2ad1] transition-colors">
+              class="flex items-center justify-between gap-2 px-4 py-3 rounded-xl border border-slate-200 text-left text-sm font-medium text-slate-700 hover:border-[#b6a3ff] hover:bg-[#fff0f5] hover:text-[#e94a76] transition-colors">
               <span>${escapeHtml(s.subject_name)}</span>
               <svg class="w-4 h-4 text-slate-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </button>`).join('')}

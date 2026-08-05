@@ -2,3 +2,4 @@ CONTEXT.md
 package-lock.json
 .env
 node_modules
+backend/logs/

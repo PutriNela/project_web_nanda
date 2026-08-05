@@ -9,7 +9,7 @@ const DB_HOST     = process.env.DB_HOST     || '127.0.0.1';
 const DB_PORT     = parseInt(process.env.DB_PORT || '3306', 10);
 const DB_USER     = process.env.DB_USER     || 'root';
 const DB_PASSWORD = process.env.DB_PASSWORD || '';
-const DB_NAME     = process.env.DB_NAME     || 'cbt_jokey_3';
+const DB_NAME     = process.env.DB_NAME     || 'cbt_app';
 
 async function migrate() {
   console.log('Menjalankan migrasi database MySQL...');

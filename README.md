@@ -35,7 +35,7 @@ Aplikasi CBT berbasis arsitektur REST API Monolitik Tiga-Lapis (Express + MySQL 
    ALLOWED_ORIGINS=https://domain-frontend-kamu.com
    ```
    Isi dengan alamat yang muncul di address bar browser saat buka website-nya (boleh lebih dari satu, dipisah koma). Kalau dikosongkan, server fallback ke izinkan semua origin (`*`) dan mencetak warning jelas di log — **jangan biarkan kosong kalau sudah live/publish**. Lihat `SECURITY.md`.
-4. **Migrasi database** (otomatis membuat database `cbt_jokey_3` beserta seluruh tabel; aman dijalankan berkali-kali/idempotent untuk upgrade skema lama)
+4. **Migrasi database** (otomatis membuat database `cbt_app` beserta seluruh tabel; aman dijalankan berkali-kali/idempotent untuk upgrade skema lama)
    ```
    npm run migrate
    ```
